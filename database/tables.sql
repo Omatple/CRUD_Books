@@ -1,8 +1,8 @@
 -- Table authors
 CREATE TABLE authors (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    first_name VARCHAR(80) NOT NULL,
-    last_name VARCHAR(100) NOT NULL,
+    name VARCHAR(80) NOT NULL,
+    surname VARCHAR(100) NOT NULL,
     country VARCHAR(80) NOT NULL
 );
 

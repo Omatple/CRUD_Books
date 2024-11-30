@@ -3,7 +3,8 @@ CREATE TABLE authors (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(80) NOT NULL,
     surname VARCHAR(100) NOT NULL,
-    country VARCHAR(80) NOT NULL
+    country VARCHAR(80) NOT NULL,
+    image VARCHAR(150) NOT NULL
 );
 
 -- Table books

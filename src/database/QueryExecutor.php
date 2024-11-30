@@ -1,16 +1,17 @@
 <?php
 
-namespace App\database;
+namespace App\Database;
 
 use Exception;
 use PDOException;
 use PDOStatement;
 
-class QueryExecutor extends Connection
+require __DIR__ . "/../../vendor/autoload.php";
+class QueryExecutor
 {
     protected static function executeQuery(string $query, ?string $customErrorMessage = null, ?array $parametersStatament = null): PDOStatement
     {
-        $connection = parent::getInstance();
+        $connection = Connection::getInstance();
         $pdo = $connection->getConnection()->prepare($query);
         try {
             ($parametersStatament === null) ?

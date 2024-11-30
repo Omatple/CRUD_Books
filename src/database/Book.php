@@ -1,8 +1,9 @@
 <?php
 
-namespace App\database;
+namespace App\Database;
 
-use App\utils\ImageConstants;
+use \Faker\Factory;
+use \Mmo\Faker\FakeimgProvider;
 
 require __DIR__ . "/../../vendor/autoload.php";
 
@@ -42,9 +43,9 @@ class Book extends QueryExecutor
     public static function isFieldUnique(string $field, string $value, ?int $id = null): bool
     {
         $paremetersStatement = ($id === null) ?
-            [":f" => $field, ":v" => $value]
+            [":v" => $value]
             :
-            [":f" => $field, ":v" => $value, ":i" => $id];
+            [":v" => $value, ":i" => $id];
         $query = ($id === null) ?
             "SELECT * FROM books WHERE $field = :v"
             :
@@ -54,6 +55,11 @@ class Book extends QueryExecutor
             "Failed checking if field '$field' of books with value '$value' is unique",
             $paremetersStatement
         )->fetchColumn();
+    }
+
+    public static function  getCoverById(int $id): string|bool
+    {
+        return parent::executeQuery("SELECT cover FROM books WHERE id = :i", "Failed getting cover of book with ID '$id'", [":i" => $id])->fetchColumn();
     }
 
     public function update(int $id): void
@@ -70,6 +76,30 @@ class Book extends QueryExecutor
             "Failed to update book '$id'",
             $parametersStatement
         );
+    }
+
+    public static function  generateFakeBooks(int $amount): void
+    {
+        $faker = Factory::create("es_ES");
+        $faker->addProvider(new FakeimgProvider($faker));
+        for ($i = 0; $i < $amount; $i++) {
+            $title = $faker->title() . $faker->unique()->word();
+            $synopsis = $faker->text();
+            $cover = "img/books/" . $faker->fakeImg(dir: __DIR__ . "/../../public/img/books/", width: 640, height: 640, fullPath: false, text: strtoupper(substr($title, 0, 2)), backgroundColor: [random_int(0, 255), random_int(0, 255), random_int(0, 255)]);
+            $author_id = $faker->randomElement(Author::getAllIds());
+            (new Book)
+                ->setTitle(ucwords($title))
+                ->setSynopsis($synopsis)
+                ->setCover($cover)
+                ->setAuthor_id($author_id)
+                ->create();
+        }
+    }
+
+    public static function restoreBooks(): void
+    {
+        parent::executeQuery("DELETE FROM books", "Failed to restore table books");
+        parent::executeQuery("ALTER TABLE books AUTO_INCREMENT = 1", "Failed to restore auto increment of the table books");
     }
 
     /**
@@ -145,9 +175,9 @@ class Book extends QueryExecutor
      *
      * @return  self
      */
-    public function setCover(?string $cover = null)
+    public function setCover(string $cover)
     {
-        $this->cover = ($cover === null) ? "img/" . ImageConstants::DEFAULT_COVER_FILENAME : $cover;
+        $this->cover = $cover;
 
         return $this;
     }

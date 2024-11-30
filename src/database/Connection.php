@@ -1,6 +1,6 @@
 <?php
 
-namespace App\database;
+namespace App\Database;
 
 use \Dotenv\Dotenv;
 use \Exception;
@@ -39,7 +39,7 @@ class Connection
         }
     }
 
-    protected static function getInstance(): Connection
+    public static function getInstance(): Connection
     {
         if (self::$instance === null) {
             self::$instance = new Connection;
@@ -47,13 +47,13 @@ class Connection
         return self::$instance;
     }
 
-    protected function closeConnection(): void
+    public function closeConnection(): void
     {
         $this->connection = null;
         self::$instance = null;
     }
 
-    protected function getConnection(): PDO
+    public function getConnection(): PDO
     {
         return $this->connection;
     }

@@ -1,5 +1,5 @@
 {
-    "name": "omatple/crud_books",
+    "name": "o-m-t/crud_books",
     "type": "project",
     "autoload": {
         "psr-4": {
@@ -8,7 +8,7 @@
     },
     "authors": [
         {
-            "name": "omatple",
+            "name": "Omatple",
             "email": "omatple@gmail.com"
         }
     ],

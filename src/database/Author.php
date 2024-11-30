@@ -1,6 +1,9 @@
 <?php
 
-namespace App\database;
+namespace App\Database;
+
+use \Faker\Factory;
+use \Mmo\Faker\FakeimgProvider;
 
 class Author extends QueryExecutor
 {
@@ -8,6 +11,7 @@ class Author extends QueryExecutor
     private string $name;
     private string $surname;
     private string $country;
+    private string $image;
 
     public static function read(): array
     {
@@ -20,9 +24,10 @@ class Author extends QueryExecutor
             ":n" => $this->name,
             ":s" => $this->surname,
             ":c" => $this->country,
+            ":im" => $this->image,
         ];
         parent::executeQuery(
-            "INSERT INTO authors (name, surname, country) VALUES (:n, :s, :c)",
+            "INSERT INTO authors (name, surname, country, image) VALUES (:n, :s, :c, :im)",
             "Failed to create author '{$this->name}'",
             $parametersStatement
         );
@@ -57,17 +62,48 @@ class Author extends QueryExecutor
             ":n" => $this->name,
             ":s" => $this->surname,
             ":c" => $this->country,
+            ":im" => $this->image,
         ];
         parent::executeQuery(
-            "UPDATE books SET name = :n, surname = :s, country = :c WHERE id = :i",
+            "UPDATE books SET name = :n, surname = :s, country = :c, image = :im WHERE id = :i",
             "Failed to update author '$id'",
             $parametersStatement
         );
     }
 
+    public static function  generateFakeAuthors(): void
+    {
+        $faker = Factory::create("es_ES");
+        $faker->addProvider(new FakeimgProvider($faker));
+        $amount = 20;
+        for ($i = 0; $i < $amount; $i++) {
+            $name = $faker->name();
+            $surname = $faker->lastName() . " " . $faker->lastName();
+            $country = $faker->country();
+            $image = "img/authors/" . $faker->fakeImg(dir: __DIR__ . "/../../public/img/authors/", width: 640, height: 640, fullPath: false, text: strtoupper(substr($name, 0, 1) . substr($surname, 0, 1) . substr(explode(" ", $surname)[1], 0, 1)), backgroundColor: [random_int(0, 255), random_int(0, 255), random_int(0, 255)]);
+            (new Author)
+                ->setName($name)
+                ->setSurname($surname)
+                ->setCountry($country)
+                ->setImage($image)
+                ->create();
+        }
+    }
+
+    public static function restoreAuthors(): void
+    {
+        parent::executeQuery("DELETE FROM authors", "Failed to restore table authors");
+        parent::executeQuery("ALTER TABLE authors AUTO_INCREMENT = 1", "Failed to restore auto increment of the table authors");
+    }
+
     public static function getAllIds(): array
     {
-        return parent::executeQuery("SELECT id FROM authors", "Failed retraiving IDs of authors")->fetchColumn();
+        $ids = [];
+        $result = parent::executeQuery("SELECT id FROM authors", "Failed retraiving IDs of authors");
+        while ($row = $result->fetchColumn()) {
+            $ids[] = (int)$row;
+        }
+        return $ids;
     }
 
     /**
@@ -146,6 +182,24 @@ class Author extends QueryExecutor
     public function setCountry($country)
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of image
+     */
+    public function getImage(): string
+    {
+        return $this->image;
+    }
+
+    /**
+     * Set the value of image
+     */
+    public function setImage(string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

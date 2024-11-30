@@ -1,4 +1,6 @@
 .env
 /vendor
-/public/img/*
-!/public/img/default.png
+/public/img/authors/*.*
+/public/img/books/*.*
+!/public/img/books/defaultCover.png
+!/public/img/authors/default.png

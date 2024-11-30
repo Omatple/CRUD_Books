@@ -1,13 +1,13 @@
 <?php
 
-use App\Database\Book;
+use App\Database\Author;
 use App\Utils\SweetAlertDisplay;
 
 session_start();
 
 require __DIR__ . "/../vendor/autoload.php";
 
-$books = Book::read();
+$authors = Author::read();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -17,7 +17,7 @@ $books = Book::read();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="author" content="Ángel Martínez Otero">
-    <title>Books</title>
+    <title>Authors</title>
     <!-- CDN SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- CDN Tailwind CSS -->
@@ -30,48 +30,48 @@ $books = Book::read();
     <section>
         <div class="flex flex-col justify-center items-center mt-8 mb-4">
             <h2 class="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                <span class="text-indigo-600">Books</span>
+                <span class="text-indigo-600">Authors</span>
             </h2>
-            <a href="authors.php" class="text-xl font-extrabold text-indigo-600 sm:text-xl md:text-xl">
-                Authors
+            <a href="books.php" class="text-xl font-extrabold text-indigo-600 sm:text-xl md:text-xl">
+                Books
             </a>
         </div>
         <div class="mx-auto max-w-screen-2xl px-4 lg:px-12">
             <div class="bg-white dark:bg-gray-800 shadow-md sm:rounded-lg overflow-hidden">
                 <div class="flex justify-end mx-4 py-4 border-t dark:border-gray-700">
-                    <a href="new.php" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700">
-                        <i class="fa-solid fa-plus mr-2"></i>Add Book
+                    <a href="newAuthor.php" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700">
+                        <i class="fa-solid fa-plus mr-2"></i>Add Author
                     </a>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm text-gray-500 dark:text-gray-400">
                         <thead class="text-xs uppercase bg-gray-50 dark:bg-gray-700">
                             <tr>
-                                <th class="p-4">Title</th>
-                                <th class="p-4">Synopsis</th>
-                                <th class="p-4">Author</th>
+                                <th class="p-4">Name</th>
+                                <th class="p-4">Surname</th>
+                                <th class="p-4">Complete Name</th>
                                 <th class="p-4">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($books as $book): ?>
+                            <?php foreach ($authors as $author): ?>
                                 <tr class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
                                     <th class="px-4 py-3 flex items-center">
-                                        <img class="h-12 w-12 rounded-full mr-3" src="<?= $book["cover"] ?>" alt="<?= $book["title"] ?> book picture">
-                                        <?= $book["title"] ?>
+                                        <img class="h-12 w-12 rounded-full mr-3" src="<?= $author["image"] ?>" alt="<?= $author["name"] ?> author picture">
+                                        <?= $author["name"] ?>
                                     </th>
                                     <th class="px-4 py-3 max-w-md">
-                                        <?= $book["synopsis"] ?>
+                                        <?= $author["surname"] ?>
                                     </th>
-                                    <th class="px-4 py-3"><?= $book["name"] . " " . $book["surname"] ?></th>
+                                    <th class="px-4 py-3"><?= $author["name"] . " " . $author["surname"] ?></th>
                                     <th class="px-4 py-3 flex items-center justify-center space-x-4">
-                                        <a href="update.php?id=<?= $book["id"] ?>" class="text-sm text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg px-3 py-2">
-                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        <a href="updateAuthor.php?id=<?= $author["id"] ?>" class="text-sm text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg px-3 py-2">
+                                            <i class="fa-solid fa-pen-to-square mr-2"></i>Edit
                                         </a>
-                                        <form action="delete.php" method="POST">
-                                            <input type="hidden" name="id" value="<?= $book["id"] ?>">
+                                        <form action="deleteAuthor.php" method="POST">
+                                            <input type="hidden" name="id" value="<?= $author["id"] ?>">
                                             <button type="submit" class="text-sm text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-medium rounded-lg px-3 py-2">
-                                                <i class="fa-solid fa-user-minus"></i>
+                                                Delete<i class="fa-solid fa-user-minus ml-2"></i>
                                             </button>
                                         </form>
                                     </th>

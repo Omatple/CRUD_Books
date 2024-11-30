@@ -65,10 +65,34 @@ class Author extends QueryExecutor
             ":im" => $this->image,
         ];
         parent::executeQuery(
-            "UPDATE books SET name = :n, surname = :s, country = :c, image = :im WHERE id = :i",
+            "UPDATE authors SET name = :n, surname = :s, country = :c, image = :im WHERE id = :i",
             "Failed to update author '$id'",
             $parametersStatement
         );
+    }
+
+    public static function isUniqueFullName(string $name, string $surname, ?int $id = null): bool
+    {
+        $queryId = is_null($id) ? "" : " AND id <> :i";
+        return !parent::executeQuery(
+            "SELECT * FROM authors WHERE name = :n AND surname = :s$queryId",
+            "Failed checking if unique full name",
+            is_null($id) ? [
+                ":n" => $name,
+                ":s" => $surname,
+            ] : [
+                ":n" => $name,
+                ":s" => $surname,
+                ":i" => $id,
+            ]
+        )->fetchColumn();
+    }
+
+    public static function getAuthorById(int $id): array|false
+    {
+        return parent::executeQuery("SELECT * FROM authors WHERE id = :i", "Failed retraive author by id", [
+            ":i" => $id,
+        ])->fetch();
     }
 
     public static function  generateFakeAuthors(): void
@@ -104,6 +128,13 @@ class Author extends QueryExecutor
             $ids[] = (int)$row;
         }
         return $ids;
+    }
+
+    public static function  getImageById(int $id): string |false
+    {
+        return parent::executeQuery("SELECT image FROM authors WHERE id = :i", "Failed while retriving iamge of author with ID '$id'", [
+            ":i" => $id,
+        ])->fetchColumn();
     }
 
     /**

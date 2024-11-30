@@ -49,7 +49,7 @@ if (isset($_POST["title"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="author" content="Ángel Martínez Otero">
-    <title>New User</title>
+    <title>New Book</title>
     <script src="../scripts/handlerPreviewImage.js"></script>
     <!-- CDN Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -97,7 +97,7 @@ if (isset($_POST["title"])) {
                     </div>
                 </div>
                 <div class="mt-12">
-                    <button type="submit" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"><i class="fa-solid fa-user-plus mr-2"></i>Add User</button>
+                    <button type="submit" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"><i class="fa-solid fa-user-plus mr-2"></i>Add Book</button>
                     <button type="reset" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-yellow-700 rounded-lg focus:ring-4 focus:ring-yellow-200 dark:focus:ring-yellow-900 hover:bg-yellow-800 ml-4"><i class="fa-regular fa-window-restore mr-2"></i>Reset</button>
                     <a href="books.php" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-red-200 dark:focus:ring-red-900 hover:bg-red-800 ml-4"><i class="fa-solid fa-backward mr-2"></i>Back</a>
                 </div>

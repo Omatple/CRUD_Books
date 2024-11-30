@@ -62,6 +62,11 @@ class Book extends QueryExecutor
         return parent::executeQuery("SELECT cover FROM books WHERE id = :i", "Failed getting cover of book with ID '$id'", [":i" => $id])->fetchColumn();
     }
 
+    public static function  getBookById(int $id): array|bool
+    {
+        return parent::executeQuery("SELECT * FROM books WHERE id = :i", "Failed retreive book with ID '$id'", [":i" => $id])->fetch();
+    }
+
     public function update(int $id): void
     {
         $parametersStatement = [
